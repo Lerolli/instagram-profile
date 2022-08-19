@@ -33,6 +33,9 @@ final class CollectionViewCell: UICollectionViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(Cell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        backgroundColor = .clear
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: topAnchor),
@@ -72,8 +75,6 @@ extension CollectionViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-        cell.layer.borderWidth = 1
-        cell.layer.borderColor = UIColor.black.cgColor
         return cell
     }
     

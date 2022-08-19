@@ -2,7 +2,7 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     private var headerView = UIView()
-    private var tabView = UIView()
+    private var tabView = TabView()
     private var layout: UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 0
@@ -31,22 +31,28 @@ class ProfileViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.bounces = false
         collectionView.isPagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
         
-        headerView.layer.borderWidth = 1
-        headerView.layer.borderColor = UIColor.red.cgColor
         
-        tabView.layer.borderWidth = 1
-        tabView.layer.borderColor = UIColor.blue.cgColor
-        
-        view.addSubview(collectionView)
         view.addSubview(headerView)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tap))
+        headerView.addGestureRecognizer(tap)
+        headerView.backgroundColor = .blue
+        view.addSubview(collectionView)
+        collectionView.backgroundColor = .clear
+        view.backgroundColor = .white
         view.addSubview(tabView)
         setupConstraint()
         scrollToDefault()
     }
     
+    @objc func tap() {
+        print("tap")
+    }
+    
     func scrollToDefault() {
+        
         setHeader(offset: 0)
         collectionView.setContentOffset(.zero, animated: false)
     }
@@ -56,6 +62,7 @@ class ProfileViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         headerView.translatesAutoresizingMaskIntoConstraints = false
         tabView.translatesAutoresizingMaskIntoConstraints = false
+        tabView.delegate = self
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -109,7 +116,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             let percent = abs(offsetForSelected - newOffset) / scrollView.frame.width
             let nextTabIndex = newOffset < offsetForSelected ? selectedIndex - Int(ceil(percent)) : selectedIndex + Int(ceil(percent))
             
-//            tabView.transitSelection(from: selectedIndex, to: nextTabIndex, percent: percent)
+            tabView.transitSelection(from: selectedIndex, to: nextTabIndex, percent: percent)
         }
     }
     
@@ -120,7 +127,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             return
         }
         selectedIndex = index
-//        tabView.changeSelectedTab(index: selectedIndex)
+        tabView.changeSelectedTab(index: selectedIndex)
         collectionView.reloadData()
     }
 
@@ -147,8 +154,15 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension ProfileViewController {
+extension ProfileViewController: TabsViewDelegate {
+    func didSelectTab(index: Int) {
+        selectedIndex = index
+        collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: [.top, .centeredHorizontally], animated: true)
+        collectionView.reloadData()
+    }
+    
     var isDragging: Bool {
          collectionView.isDragging || collectionView.isDecelerating
     }
 }
+

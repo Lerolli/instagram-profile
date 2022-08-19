@@ -17,6 +17,8 @@
 		3A3C4B6A28A25E48004F8A86 /* testUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3C4B6928A25E48004F8A86 /* testUITestsLaunchTests.swift */; };
 		3AC8FF9528ACC45C00BDDC34 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8FF9428ACC45C00BDDC34 /* CollectionViewCell.swift */; };
 		3AC8FF9728ACC51B00BDDC34 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8FF9628ACC51B00BDDC34 /* Cell.swift */; };
+		3AE587A428ACD8280090B69E /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE587A328ACD8280090B69E /* TabView.swift */; };
+		3AE587A628ACD8970090B69E /* TabViewCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE587A528ACD8970090B69E /* TabViewCollectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		3A3C4B6928A25E48004F8A86 /* testUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = testUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3AC8FF9428ACC45C00BDDC34 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		3AC8FF9628ACC51B00BDDC34 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		3AE587A328ACD8280090B69E /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
+		3AE587A528ACD8970090B69E /* TabViewCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewCollectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,8 @@
 				3A3C4B4A28A25E47004F8A86 /* ProfileViewController.swift */,
 				3AC8FF9428ACC45C00BDDC34 /* CollectionViewCell.swift */,
 				3AC8FF9628ACC51B00BDDC34 /* Cell.swift */,
+				3AE587A328ACD8280090B69E /* TabView.swift */,
+				3AE587A528ACD8970090B69E /* TabViewCollectionCell.swift */,
 			);
 			path = test;
 			sourceTree = "<group>";
@@ -264,6 +270,8 @@
 				3A3C4B4728A25E47004F8A86 /* AppDelegate.swift in Sources */,
 				3AC8FF9728ACC51B00BDDC34 /* Cell.swift in Sources */,
 				3AC8FF9528ACC45C00BDDC34 /* CollectionViewCell.swift in Sources */,
+				3AE587A628ACD8970090B69E /* TabViewCollectionCell.swift in Sources */,
+				3AE587A428ACD8280090B69E /* TabView.swift in Sources */,
 				3A3C4B4928A25E47004F8A86 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
