@@ -2,13 +2,10 @@ import Foundation
 import UIKit
 
 struct CollectionViewCellData {
-//    let tabModel: TabModel
     let billIndex: Int
-//    var expandedSections: [Int]
     var topInset: CGFloat
     var headerHeight: CGFloat
     weak var delegate: ProfileViewController?
-//    var showCalendarSection: Bool
 }
 
 final class CollectionViewCell: UICollectionViewCell {
@@ -63,9 +60,6 @@ extension CollectionViewCell: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         contentOffset = scrollView.contentOffset
         delegate?.tableDidScroll(offset: scrollView.contentOffset, cell: self)
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
     }
 }
 extension CollectionViewCell: UICollectionViewDataSource {

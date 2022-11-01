@@ -57,7 +57,7 @@ class ProfileViewController: UIViewController {
         collectionView.setContentOffset(.zero, animated: false)
     }
 
-
+    
     private func setupConstraint() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         headerView.translatesAutoresizingMaskIntoConstraints = false
