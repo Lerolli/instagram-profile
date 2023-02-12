@@ -1,17 +1,13 @@
 import UIKit
 
-class ProfileViewController: UIViewController {
-    private var headerView = UIView()
-    private var tabView = TabView()
-    private var layout: UICollectionViewLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 0
-        layout.scrollDirection = .horizontal
-        return layout
-    }
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+final class ProfileViewController: UIViewController {
+    
+    private let headerView = HeaderView()
+    private let tabView = TabView()
+    private let horizontalCollectionView = HorizontalCollectionView()
     
     private var headerTopContraint: NSLayoutConstraint?
+    
     private var headerViewHeight: CGFloat {
         headerView.frame.height
     }
@@ -24,54 +20,44 @@ class ProfileViewController: UIViewController {
     }
     
     private var selectedIndex = 0
+    private var viewModel = ProfileViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.bounces = false
-        collectionView.isPagingEnabled = true
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
         
-        
-        view.addSubview(headerView)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tap))
-        headerView.addGestureRecognizer(tap)
-        headerView.backgroundColor = .blue
-        view.addSubview(collectionView)
-        collectionView.backgroundColor = .clear
         view.backgroundColor = .white
+        view.addSubview(headerView)
+        view.addSubview(horizontalCollectionView)
         view.addSubview(tabView)
         setupConstraint()
+        
         scrollToDefault()
-    }
-    
-    @objc func tap() {
-        print("tap")
+        
+        horizontalCollectionView.configure(delegate: self)
     }
     
     func scrollToDefault() {
-        
         setHeader(offset: 0)
-        collectionView.setContentOffset(.zero, animated: false)
+        horizontalCollectionView.setContentOffset(.zero, animated: false)
     }
 
     
     private func setupConstraint() {
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        horizontalCollectionView.translatesAutoresizingMaskIntoConstraints = false
         headerView.translatesAutoresizingMaskIntoConstraints = false
         tabView.translatesAutoresizingMaskIntoConstraints = false
         tabView.delegate = self
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            horizontalCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            horizontalCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            horizontalCollectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            horizontalCollectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
             headerView.heightAnchor.constraint(equalToConstant: 375),
             headerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            
             tabView.heightAnchor.constraint(equalToConstant: 66),
             tabView.bottomAnchor.constraint(equalTo: headerView.bottomAnchor),
             tabView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -83,7 +69,7 @@ class ProfileViewController: UIViewController {
     }
     
     func tableDidScroll(offset: CGPoint, cell: UICollectionViewCell) {
-        guard let indexPath = collectionView.indexPath(for: cell), indexPath.row == selectedIndex else {
+        guard let indexPath = horizontalCollectionView.indexPath(for: cell), indexPath.row == selectedIndex else {
             return
         }
         
@@ -128,7 +114,7 @@ extension ProfileViewController: UICollectionViewDelegate {
         }
         selectedIndex = index
         tabView.changeSelectedTab(index: selectedIndex)
-        collectionView.reloadData()
+        horizontalCollectionView.reloadData()
     }
 
 }
@@ -139,14 +125,21 @@ extension ProfileViewController: UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "VerticalCollectionView",
+            for: indexPath
+        )
         let topInset = tableTopInset ?? tableTopInset1
-        (cell as? CollectionViewCell)?.configure(cellObject: CollectionViewCellData(billIndex: 0, topInset: topInset, headerHeight: tableTopInset1, delegate: self))
+        (cell as? VerticalCollectionView)?.configure(cellObject: VerticalCollectionView.CellData(
+            billIndex: 0,
+            topInset: topInset,
+            headerHeight: tableTopInset1,
+            delegate: self
+        ))
+        
         return cell
     }
 }
-
-
 
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -157,12 +150,30 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 extension ProfileViewController: TabsViewDelegate {
     func didSelectTab(index: Int) {
         selectedIndex = index
-        collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: [.top, .centeredHorizontally], animated: true)
-        collectionView.reloadData()
+        horizontalCollectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: [.top, .centeredHorizontally], animated: true)
+        horizontalCollectionView.reloadData()
     }
     
     var isDragging: Bool {
-         collectionView.isDragging || collectionView.isDecelerating
+         horizontalCollectionView.isDragging || horizontalCollectionView.isDecelerating
     }
 }
 
+extension ProfileViewController: HorizontalCollectionViewDelegate {
+    func getRectHeaderView() -> [CGRect] {
+        return headerView.subviews.map {$0.frame }
+    }
+    
+    func getTextForRow(_ indexPath: IndexPath) -> String {
+        switch indexPath.section {
+        case 0:
+            return viewModel.firstRow[indexPath.row]
+        case 1:
+            return viewModel.secondRow[indexPath.row]
+        case 2:
+            return viewModel.thirdRow[indexPath.row]
+        default:
+            return ""
+        }
+    }
+}

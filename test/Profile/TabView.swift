@@ -104,8 +104,11 @@ extension TabView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TabViewCollectionCell", for: indexPath)
-        (cell as? TabViewCollectionCell)?.label.text  = String(indexPath.row)
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "TabViewCollectionCell",
+            for: indexPath
+        )
+        (cell as? TabViewCollectionCell)?.configure(textLabel: String(indexPath.row))
         return cell
     }
 }
